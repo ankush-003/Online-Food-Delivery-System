@@ -21,8 +21,7 @@ void displayMainMenu() {
         [4] Delivery
         [5] Exit
 
-        Enter your choice:
-    )" << endl;
+        Enter your choice: )" << endl;
     // cout << "Main Menu:" << endl;
     // cout << "1. Admin" << endl;
     // cout << "2. User" << endl;
@@ -42,8 +41,33 @@ namespace main_funcs {
 
     // Function to execute option 2
     void User() {
-        // user login function
-        
+        cout << "Welcome to User Login" << endl;
+        cout << "1. Login" << endl;
+        cout << "2. Register" << endl;
+        cout << "3. Forgot Password" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Enter your choice: ";
+        int choice;
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                user_funcs::login();
+                break;
+            case 2:
+                user_funcs::registerUser();
+                break;
+            case 3:
+                user_funcs::forgot();
+                break;
+
+            case 4:
+                cout << "Exiting..." << endl;
+                break;    
+            default:
+                system("cls");
+                cout << "Invalid choice. Please try again." << endl << endl;
+                break;
+        }
     }
 
     // Function to execute option 3
