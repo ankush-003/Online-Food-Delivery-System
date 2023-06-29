@@ -136,12 +136,13 @@ void User::select_hotel()
     }
     string line;
     stringstream ss;
-    getline(hotels, line, ',');
+    hotels >> line;
     string hotelName, hotelpwd, hotelAddress, hotelPhone, hotelEmail;
     cout << "\t\t\t Hotels Available: " << endl;
     vector<string> hotelNames;
     int i = 1;
-    while (getline(hotels, line, ','))
+    cout << "\t\t\t" << "Hotel Name" << endl;
+    while (hotels >> line)
     {
         ss << line;
         getline(ss, hotelName, ',');
@@ -149,15 +150,19 @@ void User::select_hotel()
         getline(ss, hotelAddress, ',');
         getline(ss, hotelPhone, ',');
         getline(ss, hotelEmail, ',');
-        cout << line << endl;
-        ++i;
-        // cout << "\t\t\t " << ++i << ". " << hotelName << endl;
+        // cout << line << endl;
+        cout << "\t\t\t " << i++ << ". " << hotelName << endl;
         hotelNames.push_back(hotelName);
         ss.clear();
     }
     cout << "\t\t\t Enter your choice: ";
     int choice;
     cin >> choice;
+    if (choice > hotelNames.size())
+    {
+        cout << "Invalid choice!" << endl;
+        return;
+    }
     selectedHotel = hotelNames[choice - 1];
     cout << "\t\t\t You have selected " << selectedHotel << endl;
     cout << "Hotel Selection executed!" << endl
@@ -168,7 +173,7 @@ void User::list_items()
 {
     cout << "Executing List Items..." << endl;
     cout << "\t\t\t Items Available: " << endl;
-    ifstream items("./Database/" + selectedHotel + ".csv");
+    ifstream items("./Database/menu_" + selectedHotel + ".csv");
     if (!items.is_open())
     {
         cout << "File not found!" << endl;
@@ -176,15 +181,16 @@ void User::list_items()
     }
     string line;
     stringstream ss;
-    getline(items, line, ',');
+    items >> line;
     string itemName, itemPrice;
+    cout << "\t\t\t" << "ID" << " " << "Item Name" << " " << "Price" << endl;
     int i = 1;
-    while (getline(items, line, ','))
+    while (items >> line)
     {
         ss << line;
         getline(ss, itemName, ',');
         getline(ss, itemPrice, ',');
-        cout << "\t\t\t " << ++i << ". " << itemName << " " << itemPrice << endl;
+        cout << "\t\t\t " << i++ << ". " << itemName << " " << itemPrice << endl;
         Item item(itemName, stoi(itemPrice));
         allItems.push_back(item);
         ss.clear();
@@ -199,6 +205,11 @@ void User::add_item()
     cout << "\t\t\t Enter Item number to add: ";
     int choice;
     cin >> choice;
+    if (choice > allItems.size())
+    {
+        cout << "Invalid choice!" << endl;
+        return;
+    }
     cart.push_back(allItems[choice - 1]);
     cout << allItems[choice - 1] << " added to cart!" << endl;
     // cout << "Item added!" << endl << endl;
@@ -215,6 +226,11 @@ void User::remove_item()
     cout << "\t\t\t Enter Item number to remove: ";
     int choice;
     cin >> choice;
+    if (choice > cart.size())
+    {
+        cout << "Invalid choice!" << endl;
+        return;
+    }
     cart.erase(cart.begin() + choice - 1);
     cout << "Item removed!" << endl
          << endl;
@@ -265,7 +281,7 @@ void user_funcs::login()
     cout << "Executing User Login..." << endl;
     int count;
     string userID, password, id, pass;
-    system("clear");
+    //////system("clear");
     cout << "\t\t\t Please Enter the username and password" << endl;
     cout << "\t\t\t Username: ";
     cin >> userID;
@@ -279,17 +295,17 @@ void user_funcs::login()
     }
     string line;
     stringstream ss;
-    getline(input, line, ',');
-    while (getline(input, line, ','))
+    input >> line;
+    while (input >> line)
     {
         ss << line;
         getline(ss, id, ',');
         getline(ss, pass, ',');
         ss.clear();
-        cout << line << endl;
+        // cout << line << endl;
         // cout << id << " " << pass << endl;
         // cout << line << endl;
-        if (userID == "Ankush" && password == "123")
+        if (userID == id && password == pass)
         {
             cout << "\t\t\t Login Successful!" << endl;
             User::count++;
@@ -328,7 +344,7 @@ void user_funcs::login()
                     cout << "Invalid choice!" << endl;
                     break;
                 }
-                system("clear");
+                //////system("clear");
                 break;
             }
         }
@@ -338,8 +354,8 @@ void user_funcs::login()
     {
         cout << "\t\t\t Invalid Username or Password!" << endl;
         cout << "\t\t\t Please try again!" << endl;
-        // system("pause");
-        // system("cls");
+        // ////system("pause");
+        // ////system("cls");
         return;
     }
 
