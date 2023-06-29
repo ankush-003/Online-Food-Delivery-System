@@ -8,11 +8,11 @@ app.o: app.cpp Admin.h User.h Hotel.h
 Admin.o: Admin.cpp Admin.h
 	g++ -c Admin.cpp 
 
-User.o: User.cpp User.h Hotel.h
+User.o: User.cpp User.h 
 	g++ -c User.cpp
 
-# Hotel.o: Hotel.cpp Hotel.h
-# 	g++ -c Hotel.cpp	
+Hotel.o: Hotel.cpp Hotel.h
+	g++ -c Hotel.cpp	
 
 clean:
 	rm -f *.o app
