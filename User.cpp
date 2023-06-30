@@ -32,7 +32,7 @@ void User::select_hotel()
     string line;
     stringstream ss;
     hotels >> line;
-    string hotelName, hotelpwd, hotelAddress, hotelPhone, hotelEmail;
+    string hotelName, hotelAddress, hotelPhone, hotelEmail;
     cout << "\t\t\t Hotels Available: " << endl;
     vector<string> hotelNames;
     int i = 1;
@@ -41,7 +41,7 @@ void User::select_hotel()
     {
         ss << line;
         getline(ss, hotelName, ',');
-        getline(ss, hotelpwd, ',');
+        // getline(ss, hotelpwd, ',');
         getline(ss, hotelAddress, ',');
         getline(ss, hotelPhone, ',');
         getline(ss, hotelEmail, ',');

@@ -34,9 +34,72 @@ void displayMainMenu() {
 namespace main_funcs {
     // Function to execute option 1
     void Admin() {
-        cout << "Executing Option 1..." << endl;
-        // Your logic for Option 1 goes here
-        cout << "Option 1 executed!" << endl << endl;
+        // cout << "Executing Option 1..." << endl;
+        cout << "\t\t\t Welcome to Admin Login" << endl;
+        cout << "\t\t\t Enter Username: ";
+        string username;
+        global_funcs::input_flush();
+        cin >> username;
+        cout << "\t\t\t Enter Password: ";
+        string password;
+        global_funcs::input_flush();
+        cin >> password;
+
+        if(admin_funcs::login(username, password)) {
+            cout << "\t\t\t Login Successful!" << endl;
+            cout << "\t\t\t Welcome " << username << "!" << endl;
+            cout << "\t\t\t 1. Add Hotel" << endl;
+            cout << "\t\t\t 2. Remove Hotel" << endl;
+            cout << "\t\t\t 3. View Hotels" << endl;
+            cout << "\t\t\t 4. Add Users" << endl;
+            cout << "\t\t\t 5. Remove Users" << endl;
+            cout << "\t\t\t 6. View Users" << endl;
+            cout << "\t\t\t 7. Add Items" << endl;
+            cout << "\t\t\t 8. Remove Items" << endl;
+            cout << "\t\t\t 9. View Items" << endl;
+            cout << "\t\t\t 10. Exit" << endl;
+            cout << "\t\t\t Enter your choice: ";
+            int choice;
+            global_funcs::get_input(choice);
+            switch (choice) {
+                case 1:
+                    Admin::add_hotel();
+                    break;
+                case 2:
+                    // Admin::remove_hotel();
+                    break;
+                case 3:
+                    // Admin::view_hotels();
+                    break;
+                case 4:
+                    // Admin::add_user();
+                    break;
+                case 5:
+                    // Admin::remove_user();
+                    break;
+                case 6:
+                    // Admin::view_users();
+                    break;
+                case 7:
+                    // Admin::add_item();
+                    break;
+                case 8:
+                    // Admin::remove_item();
+                    break;
+                case 9:
+                    // Admin::view_items();
+                    break;
+                case 10:
+                    cout << "Exiting..." << endl;
+                    // exit(0);
+                    break;
+                default:
+                    cout << "Invalid choice!" << endl;
+            }
+        } else {
+            cout << "\t\t\t Login Failed!" << endl;
+        }
+        // cout << "Option 1 executed!" << endl << endl;
     }
 
     // Function to execute option 2

@@ -1,4 +1,4 @@
-hotel_name,password,hotel_address,hotel_phone,hotel_email
-A2B_Hotel,123456,1234,1234567890,a2b@gmail.com
-Ibaco_Hotel,123456,1234,1234567890,ibaco@gmail.com
-Kashain_Hotel,123456,1234,1234567890,kashain@gmail.com
+hotel_name,hotel_address,hotel_phone,hotel_email
+A2B_Hotel,1234,1234567890,a2b@gmail.com
+Ibaco_Hotel,1234,1234567890,ibaco@gmail.com
+Kashain_Hotel,1234,1234567890,kashain@gmail.com

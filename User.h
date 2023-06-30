@@ -18,6 +18,7 @@ class User {
     vector<Item> cart;
     double total;
     User(string, string, string, string);
+    User(){}; // Default constructor
     void select_hotel();
     void list_items();
     void add_item();
@@ -25,6 +26,9 @@ class User {
     void view_items();
     void view_bill();
     bool checkout();
+    // virtual void view_users() {
+    //     cout << "You are not an admin!" << endl;
+    // }
     friend ostream& operator<<(ostream&, User&);
 };
 
@@ -38,14 +42,16 @@ namespace user_funcs {
 namespace global_funcs {
     inline void input_flush() {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cin.ignore(1000, '\n');
     }
     template <typename T>
     void get_input(T& var, string prompt = "") {
         cout << prompt;
         if(!(cin >> var)) {
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            // cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cin.ignore(1000, '\n');
             cout << "Invalid input!" << endl;
             return;
         }
