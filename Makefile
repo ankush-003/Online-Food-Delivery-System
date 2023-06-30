@@ -1,6 +1,7 @@
 all: app
 app: app.o Admin.o User.o Hotel.o
 	g++ -o app app.o Admin.o User.o Hotel.o
+	rm -f *.o
 
 app.o: app.cpp Admin.h User.h Hotel.h
 	g++ -c app.cpp

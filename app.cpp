@@ -103,7 +103,8 @@ int main() {
         //     cin.ignore(10000, '\n');
         //     continue;
         // }
-        cin >> choice;
+        // cin >> choice;
+        global_funcs::get_input(choice, "Enter your choice: ");
 
         switch (choice) {
             case 1:

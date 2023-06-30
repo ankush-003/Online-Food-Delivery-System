@@ -8,12 +8,15 @@ using namespace std;
 class User {
     string password;
     public:
+    static string user_db;
     static int count;
     string userID;
     string selectedHotel;
+    string Address;
+    string Phone;
     vector<Item> allItems;
     vector<Item> cart;
-    User(string, string);
+    User(string, string, string, string);
     void select_hotel();
     void list_items();
     void add_item();
@@ -31,8 +34,16 @@ namespace user_funcs {
     void forgot();
 }
 
-namespace global_func {
+namespace global_funcs {
     template <typename T>
-    void get_input(T&);
+    void get_input(T& var, string prompt = "") {
+        cout << prompt;
+        if(!(cin >> var)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Invalid input!" << endl;
+            return;
+        }
+    }
 }
 #endif

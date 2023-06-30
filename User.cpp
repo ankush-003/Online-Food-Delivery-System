@@ -6,7 +6,9 @@ using namespace std;
 
 int User::count = 0;
 
-User::User(string userID, string password) : userID(userID), password(password)
+string User::user_db = "./Database/users.csv";
+
+User::User(string userID, string password, string Address, string Phone): userID(userID), password(password), Address(Address), Phone(Phone)
 {
     count++;
     cout << "\t\t\t Welcome " << userID << "!" << endl;
@@ -156,7 +158,9 @@ void User::view_bill()
 ostream &operator<<(ostream &os, User &user)
 {
     os << "\t\t\t User ID: " << user.userID << endl;
-    os << "\t\t\t Password: " << user.password << endl;
+    // os << "\t\t\t Password: " << user.password << endl;
+    os << "\t\t\t Address: " << user.Address << endl;
+    os << "\t\t\t Phone: " << user.Phone << endl;
     os << "\t\t\t Selected Hotel: " << user.selectedHotel << endl;
     os << "\t\t\t Cart: " << endl;
     for (auto item : user.cart)
@@ -168,16 +172,18 @@ ostream &operator<<(ostream &os, User &user)
 
 void user_funcs::login()
 {
-    cout << "Executing User Login..." << endl;
+    cout << "\t\t\t Executing User Login..." << endl;
     int count = 0;
-    string userID, password, id, pass;
+    string userID, password, id, pass, address, phone, email;
     //////system("clear");
     cout << "\t\t\t Please Enter the username and password" << endl;
     cout << "\t\t\t Username: ";
-    cin >> userID;
+    // cin >> userID;
+    global_funcs::get_input(userID);
     cout << "\t\t\t Password: ";
-    cin >> password;
-    ifstream input("./Database/users.csv");
+    // cin >> password;
+    global_funcs::get_input(password);
+    ifstream input(User::user_db);
     if (!input.is_open())
     {
         cout << "File not found!" << endl;
@@ -191,6 +197,8 @@ void user_funcs::login()
         ss << line;
         getline(ss, id, ',');
         getline(ss, pass, ',');
+        getline(ss, address, ',');
+        getline(ss, phone, ',');
         ss.clear();
         // cout << line << endl;
         // cout << id << " " << pass << endl;
@@ -200,7 +208,7 @@ void user_funcs::login()
             cout << "\t\t\t Login Successful!" << endl;
             User::count++;
             count++;
-            User user(userID, password);
+            User user(userID, password, address, phone);
             user.select_hotel();
             user.list_items();
             int choice;
@@ -256,15 +264,89 @@ void user_funcs::login()
 void user_funcs::registerUser()
 {
     cout << "Executing User Registration..." << endl;
-    // Your logic for User Registration goes here
-    cout << "User Registration executed!" << endl
-         << endl;
+    string userID, password, address, phone;
+    cout << "\t\t\t Enter username: ";
+    global_funcs::get_input(userID);
+    cout << "\t\t\t Enter password: ";
+    global_funcs::get_input(password);
+    cout << "\t\t\t Enter address: ";
+    // global_funcs::get_input(address);
+    cin.clear();
+    cin.ignore(1000,'\n');
+    getline(cin, address);
+    cout << "\t\t\t Enter phone: ";
+    // cin.clear();
+    // cin.ignore(1000,'\n');
+    global_funcs::get_input(phone);
+    ofstream output(User::user_db, ios::app);
+    if(!output.is_open()){
+        cout << "File not found!" << endl;
+        return;
+    }
+    output << userID << "," << password << "," << address << "," << phone << "\n";
+    output.close();
+    cout << "\t\t\t User Registered Successfully!" << endl;
+    cout << "\t\t\t Please login to continue!" << endl;
+    system("clear");
+    // cout << "User Registration executed!" << endl
 }
 
 void user_funcs::forgot()
 {
-    cout << "Executing User Forgot Password..." << endl;
-    // Your logic for User Forgot Password goes here
-    cout << "User Forgot Password executed!" << endl
-         << endl;
+    cout << "\t\t\t Executing User Forgot Password..." << endl;
+    system("clear");
+    int choice;
+    cout << "\t\t\t 1. Search your id by username" << endl;
+    cout << "\t\t\t 2. Go Back to Main Menu" << endl;
+    cout << "\t\t\t Enter Your Choice: ";
+    global_funcs::get_input(choice);
+    string uname, upass, uaddress, uphone;
+    string sname;
+    string line;
+    stringstream ss;
+    ifstream database(User::user_db);
+    if(!database.is_open()) {
+        cout << "File Not Found!" << endl;
+        return;
+    }
+    bool found = false;
+    switch (choice)
+    {
+    case 1:
+        cout << "\t\t\t Enter username: ";
+        cin.clear();
+        global_funcs::get_input(sname);
+        cout << "\t\t\t Searching for: " << sname << endl;
+        database >> line;
+        // cout << line;
+        while(database >> line) {
+            ss << line;
+            getline(ss,uname,',');
+            getline(ss, upass, ',');
+            getline(ss, uaddress, ',');
+            getline(ss, uphone, ',');
+            // cout << uname << " " << upass << " " << " " << uaddress << " " << uphone << endl;
+            ss.clear();
+            if(uname == sname) {
+                cout << "\t\t\t Account found!" << endl;
+                fstream msg("msg.txt", ios::out);
+                msg << "Your password is: " << upass << endl;
+                msg.close();
+                found = true;
+            }
+        }
+        if(!found) {
+            cout << "\t\t\t Invalid Username!" << endl;
+        }
+        break;
+    
+    case 2:
+        cout << "\t\t\t Going back to Main Menu!" << endl;
+        break; 
+    default:
+        cout << "\t\t\t Invalid Choice, Going Back!" << endl;
+        break;
+    }
+    database.close();
+    // cout << "User Forgot Password executed!" << endl
 }
