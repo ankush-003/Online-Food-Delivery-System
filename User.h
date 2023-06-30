@@ -16,6 +16,7 @@ class User {
     string Phone;
     vector<Item> allItems;
     vector<Item> cart;
+    double total;
     User(string, string, string, string);
     void select_hotel();
     void list_items();
@@ -23,9 +24,9 @@ class User {
     void remove_item();
     void view_items();
     void view_bill();
+    bool checkout();
     friend ostream& operator<<(ostream&, User&);
 };
-
 
 
 namespace user_funcs {
@@ -35,6 +36,10 @@ namespace user_funcs {
 }
 
 namespace global_funcs {
+    inline void input_flush() {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
     template <typename T>
     void get_input(T& var, string prompt = "") {
         cout << prompt;

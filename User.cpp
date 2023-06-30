@@ -8,6 +8,12 @@ int User::count = 0;
 
 string User::user_db = "./Database/users.csv";
 
+// inline void global_funcs::input_flush()
+// {
+//     cin.clear();
+//     cin.ignore(numeric_limits<streamsize>::max(), '\n');
+// }
+
 User::User(string userID, string password, string Address, string Phone): userID(userID), password(password), Address(Address), Phone(Phone)
 {
     count++;
@@ -17,7 +23,7 @@ User::User(string userID, string password, string Address, string Phone): userID
 void User::select_hotel()
 {
     cout << "Executing Hotel Selection..." << endl;
-    ifstream hotels("./Database/hotels.csv");
+    ifstream hotels(hotel_db::hotels_db);
     if (!hotels.is_open())
     {
         cout << "File not found!" << endl;
@@ -62,7 +68,7 @@ void User::list_items()
 {
     cout << "Executing List Items..." << endl;
     cout << "\t\t\t Items Available: " << endl;
-    ifstream items("./Database/menu_" + selectedHotel + ".csv");
+    ifstream items(hotel_db::items_db + selectedHotel + ".csv");
     if (!items.is_open())
     {
         cout << "File not found!" << endl;
@@ -71,7 +77,7 @@ void User::list_items()
     string line;
     stringstream ss;
     items >> line;
-    string itemName, itemPrice;
+    string itemName, itemPrice, itemQuantity;
     cout << "\t\t\t" << "ID" << " " << "Item Name" << " " << "Price" << endl;
     int i = 1;
     while (items >> line)
@@ -79,29 +85,41 @@ void User::list_items()
         ss << line;
         getline(ss, itemName, ',');
         getline(ss, itemPrice, ',');
-        getline(ss, itemPrice, ',');
-        cout << "\t\t\t " << i++ << ". " << itemName << " " << itemPrice << endl;
-        Item item(itemName, stoi(itemPrice));
+        getline(ss, itemQuantity, ',');
+        Item item(itemName, stoi(itemPrice), stoi(itemQuantity));
+        cout << "\t\t\t " << i++ << ". " << item << endl;
         allItems.push_back(item);
         ss.clear();
     }
-    cout << "List Items executed!" << endl
-         << endl;
+    // cout << "List Items executed!" << endl
 }
 
 void User::add_item()
 {
     cout << "Executing Add Item..." << endl;
-    cout << "\t\t\t Enter Item number to add: ";
-    int choice;
-    cin >> choice;
-    if (choice > allItems.size())
+    string choice;
+    do {
+        cout << "\t\t\t Enter Item number to add: ";
+        int opt = 0;
+        // cin >> choice;
+        global_funcs::get_input(opt);
+        if (opt > allItems.size())
+        {
+            cout << "Invalid choice!" << endl;
+            return;
+        }
+        allItems[opt - 1].quantity--;
+        cart.push_back(allItems[opt - 1]);
+        cout << allItems[opt - 1] << " added to cart!" << endl;
+        cout << "\t\t\t Do you want to add more items? (y/n): ";
+        global_funcs::input_flush();
+        cin >> choice;
+    } while (choice == "y" || choice == "Y");
+    cout << "Items added to cart: " << endl;
+    for (auto item : cart)
     {
-        cout << "Invalid choice!" << endl;
-        return;
+        cout << "\t\t\t " << item << endl;
     }
-    cart.push_back(allItems[choice - 1]);
-    cout << allItems[choice - 1] << " added to cart!" << endl;
     // cout << "Item added!" << endl << endl;
 }
 
@@ -122,8 +140,7 @@ void User::remove_item()
         return;
     }
     cart.erase(cart.begin() + choice - 1);
-    cout << "Item removed!" << endl
-         << endl;
+    cout << "\t\t\t Item removed!" << endl;
 }
 
 void User::view_items()
@@ -134,23 +151,68 @@ void User::view_items()
     {
         cout << "\t\t\t " << item << endl;
     }
-    cout << "View Items executed!" << endl
-         << endl;
+    // cout << "View Items executed!" << endl
+    //      << endl;
 }
 
 void User::view_bill()
 {
     cout << "Executing View Bill..." << endl;
-    int total = 0;
+    this -> total = 0;
     cout << "\t\t\t Items in cart: " << endl;
     for (auto item : cart)
     {
         cout << "\t\t\t " << item << endl;
-        total += item.price;
+        this -> total += item.price;
     }
-    cout << "\t\t\t Total: " << total << endl;
-    cout << "View Bill executed!" << endl
-         << endl;
+    cout << "\t\t\t Total: " << this -> total << endl;
+    // cout << "View Bill executed!" << endl
+    //      << endl;
+}
+
+bool User::checkout() {
+    cout << "Executing Checkout..." << endl;
+    system("clear");
+    cout << "\t\t\t Items in cart: " << endl;
+    for (auto item : cart)
+    {
+        cout << "\t\t\t " << item << endl;
+    }
+    cout << "\t\t\t Total: " << this -> total << endl;
+    cout << "\t\t\t Order Details: " << endl;
+    cout << "\t\t\t Hotel Name: " << this -> selectedHotel << endl;
+    cout << "\t\t\t Total: " << this -> total << endl;
+    cout << "\t\t\t Address: " << this -> Address << endl;
+    cout << "\t\t\t Phone: " << this -> Phone << endl;
+    cout << "\t\t\t Do you want to confirm your order? (y/n): ";
+    string choice;
+    cin >> choice;
+    if(choice == "y" || choice == "Y") {
+        ofstream bill(this->userID + "_bill.txt"); 
+        bill << "--- Bill ---" << endl;
+        bill << "\t\t\t Order Details: " << endl;
+        bill << "\t\t\t Hotel Name: " << this -> selectedHotel << endl;
+        for (auto item : cart)
+        {
+            bill << "\t\t\t " << item << endl;
+        }
+        bill << "\t\t\t Total: " << this -> total << endl;
+        bill << "\t\t\t Address: " << this -> Address << endl;
+        bill << "\t\t\t Phone: " << this -> Phone << endl;
+        bill << "--- Thank you for ordering! ---" << endl;
+        bill.close();
+        ofstream orders(hotel_db::orders_db, ios::app);
+        orders << this -> userID << "," << this -> Address << "," << this -> Phone << "," << this -> selectedHotel << "," << this -> total << endl;
+        orders.close();
+        cout << "\t\t\t Order placed successfully!" << endl;
+    } else {
+        cout << "\t\t\t Order cancelled!" << endl;
+        return false;
+    }
+    cout << "\t\t\t Checkout successful!" << endl;
+    return true;
+    // cout << "Checkout executed!" << endl
+    //      << endl;
 }
 
 // void User::get_choice()
@@ -211,8 +273,10 @@ void user_funcs::login()
             User user(userID, password, address, phone);
             user.select_hotel();
             user.list_items();
+            cout << "\t\t\t OPTIONS: " << endl;
             int choice;
-            while (true)
+            bool order_confirmed = false;
+            while (!order_confirmed)
             {
                 cout << "\t\t\t 1. Add Item" << endl;
                 cout << "\t\t\t 2. Remove Item" << endl;
@@ -220,7 +284,8 @@ void user_funcs::login()
                 cout << "\t\t\t 4. View Bill" << endl;
                 cout << "\t\t\t 5. Exit" << endl;
                 cout << "\t\t\t Enter your choice: ";
-                cin >> choice;
+                global_funcs::get_input(choice);
+                string confirm;
                 switch (choice)
                 {
                 case 1:
@@ -234,6 +299,13 @@ void user_funcs::login()
                     break;
                 case 4:
                     user.view_bill();
+                    cout << "\t\t\t Do you want to confirm the order? (y/n): ";
+                
+                    cin >> confirm;
+                    if (confirm == "y" || confirm == "Y")
+                    {
+                        order_confirmed= user.checkout();
+                    }
                     break;
                 case 5:
                     cout << "Exiting..." << endl;
@@ -243,7 +315,6 @@ void user_funcs::login()
                     break;
                 }
                 //////system("clear");
-                break;
             }
         }
     }
@@ -271,8 +342,9 @@ void user_funcs::registerUser()
     global_funcs::get_input(password);
     cout << "\t\t\t Enter address: ";
     // global_funcs::get_input(address);
-    cin.clear();
-    cin.ignore(1000,'\n');
+    // cin.clear();
+    // cin.ignore(1000,'\n');
+    global_funcs::input_flush();
     getline(cin, address);
     cout << "\t\t\t Enter phone: ";
     // cin.clear();
@@ -314,7 +386,7 @@ void user_funcs::forgot()
     {
     case 1:
         cout << "\t\t\t Enter username: ";
-        cin.clear();
+        global_funcs::input_flush();
         global_funcs::get_input(sname);
         cout << "\t\t\t Searching for: " << sname << endl;
         database >> line;

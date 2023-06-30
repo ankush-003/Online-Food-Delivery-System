@@ -10,9 +10,17 @@ class Item {
     public:
     string name;
     double price;
-    Item(string, double);
+    int quantity;
+    Item(string, double, int);
+    // Item();
     // double getPrice();
     // string getName();
     friend ostream& operator<<(ostream&, Item&);
 };
+
+namespace hotel_db {
+    const string hotels_db = "./Database/hotels.csv";
+    const string items_db = "./Database/menu_";
+    const string orders_db = "./Database/orders.csv";
+}
 #endif
