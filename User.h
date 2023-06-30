@@ -30,4 +30,9 @@ namespace user_funcs {
     void registerUser();
     void forgot();
 }
+
+namespace global_func {
+    template <typename T>
+    void get_input(T&);
+}
 #endif

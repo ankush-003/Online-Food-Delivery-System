@@ -4,124 +4,11 @@
 
 using namespace std;
 
-// class User {
-//     static int count;
-//     string password;
-//     public:
-//     string userID;
-//     string selectedHotel;
-//     vector<Item> allItems;
-//     vector<Item> cart;
-//     User(string userID, string password): userID(userID), password(password) {
-//         count++;
-//         cout << "\t\t\t Welcome " << userID << "!" << endl;
-//     }
-//     void select_hotel() {
-//         cout << "Executing Hotel Selection..." << endl;
-//         ifstream hotels("./Database/hotels.csv");
-//         if(!hotels.is_open()) {
-//             cout << "File not found!" << endl;
-//             return;
-//         }
-//         string line;
-//         stringstream ss;
-//         getline(hotels, line, ',');
-//         string hotelName, hotelpwd, hotelAddress, hotelPhone, hotelEmail;
-//         cout << "\t\t\t Hotels Available: " << endl;
-//         vector<string> hotelNames;
-//         int i = 1;
-//         while(getline(hotels, line, ',')) {
-//             ss << line;
-//             getline(ss, hotelName, ',');
-//             getline(ss, hotelpwd, ',');
-//             getline(ss, hotelAddress, ',');
-//             getline(ss, hotelPhone, ',');
-//             getline(ss, hotelEmail, ',');
-//             cout << "\t\t\t " << ++i << ". " << hotelName << endl;
-//             hotelNames.push_back(hotelName);
-//             ss.clear();
-//         }
-//         cout << "\t\t\t Enter your choice: ";
-//         int choice;
-//         cin >> choice;
-//         selectedHotel = hotelNames[choice - 1];
-//         cout << "\t\t\t You have selected " << selectedHotel << endl;
-//         cout << "Hotel Selection executed!" << endl << endl;
-//     }
-
-//     void list_items() {
-//         cout << "Executing List Items..." << endl;
-//         cout << "\t\t\t Items Available: " << endl;
-//         ifstream items("./Database/" + selectedHotel + ".csv");
-//         if(!items.is_open()) {
-//             cout << "File not found!" << endl;
-//             return;
-//         }
-//         string line;
-//         stringstream ss;
-//         getline(items, line, ',');
-//         string itemName, itemPrice;
-//         int i = 1;
-//         while(getline(items, line, ',')) {
-//             ss << line;
-//             getline(ss, itemName, ',');
-//             getline(ss, itemPrice, ',');
-//             cout << "\t\t\t " << ++i << ". " << itemName << " " << itemPrice << endl;
-//             Item item(itemName, stoi(itemPrice));
-//             allItems.push_back(item);
-//             ss.clear();
-//         }
-//         cout << "List Items executed!" << endl << endl;
-//     }
-
-//     void add_item(Item item) {
-//         cout << "Executing Add Item..." << endl;
-//         cout << "\t\t\t Enter Item number to add: ";
-//         int choice;
-//         cin >> choice;
-//         cart.push_back(allItems[choice - 1]);
-//         cout << allItems[choice - 1]<< " added to cart!" << endl;
-//         // cout << "Item added!" << endl << endl;
-//     }
-//     void remove_item(Item) {
-//         cout << "Executing Remove Item..." << endl;
-//         for(int i = 0; i < cart.size(); i++) {
-//             cout << "\t\t\t " << i + 1 << ". " << cart[i] << endl;
-//         }
-
-//         cout << "\t\t\t Enter Item number to remove: ";
-//         int choice;
-//         cin >> choice;
-//         cart.erase(cart.begin() + choice - 1);
-//         cout << "Item removed!" << endl << endl;
-//     }
-//     void view_items() {
-//         cout << "Executing View Items..." << endl;
-//         cout << "\t\t\t Items in cart: " << endl;
-//         for(auto item: cart) {
-//             cout << "\t\t\t " << item << endl;
-//         }
-//         cout << "View Items executed!" << endl << endl;
-//     }
-//     void view_bill() {
-//         cout << "Executing View Bill..." << endl;
-//         int total = 0;
-//         cout << "\t\t\t Items in cart: " << endl;
-//         for(auto item: cart) {
-//             cout << "\t\t\t " << item << endl;
-//             total += item.getPrice();
-//         }
-//         cout << "\t\t\t Total: " << total << endl;
-//         cout << "View Bill executed!" << endl << endl;
-//     }
-//     friend ostream& operator<<(ostream&, User&);
-// };
-
 int User::count = 0;
 
 User::User(string userID, string password) : userID(userID), password(password)
 {
-    // count++;
+    count++;
     cout << "\t\t\t Welcome " << userID << "!" << endl;
 }
 
@@ -190,6 +77,7 @@ void User::list_items()
         ss << line;
         getline(ss, itemName, ',');
         getline(ss, itemPrice, ',');
+        getline(ss, itemPrice, ',');
         cout << "\t\t\t " << i++ << ". " << itemName << " " << itemPrice << endl;
         Item item(itemName, stoi(itemPrice));
         allItems.push_back(item);
@@ -256,12 +144,14 @@ void User::view_bill()
     for (auto item : cart)
     {
         cout << "\t\t\t " << item << endl;
-        total += item.getPrice();
+        total += item.price;
     }
     cout << "\t\t\t Total: " << total << endl;
     cout << "View Bill executed!" << endl
          << endl;
 }
+
+// void User::get_choice()
 
 ostream &operator<<(ostream &os, User &user)
 {
@@ -279,7 +169,7 @@ ostream &operator<<(ostream &os, User &user)
 void user_funcs::login()
 {
     cout << "Executing User Login..." << endl;
-    int count;
+    int count = 0;
     string userID, password, id, pass;
     //////system("clear");
     cout << "\t\t\t Please Enter the username and password" << endl;

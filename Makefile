@@ -8,7 +8,7 @@ app.o: app.cpp Admin.h User.h Hotel.h
 Admin.o: Admin.cpp Admin.h
 	g++ -c Admin.cpp 
 
-User.o: User.cpp User.h 
+User.o: User.cpp User.h Hotel.h
 	g++ -c User.cpp
 
 Hotel.o: Hotel.cpp Hotel.h

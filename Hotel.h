@@ -7,12 +7,12 @@
 using namespace std;
 
 class Item {
-    string name;
-    int price;
     public:
-    Item(string, int);
-    int getPrice();
-    string getName();
+    string name;
+    double price;
+    Item(string, double);
+    // double getPrice();
+    // string getName();
     friend ostream& operator<<(ostream&, Item&);
 };
 #endif

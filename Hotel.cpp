@@ -4,14 +4,14 @@
 #include "Hotel.h"
 using namespace std;
 
-Item::Item(string name, int price): name(name), price(price) {}
+Item::Item(string name, double price): name(name), price(price) {}
 
-int Item::getPrice() {
-    return price;
-}
-string Item::getName() {
-    return name;
-}
+// int Item::getPrice() {
+//     return price;
+// }
+// string Item::getName() {
+//     return name;
+// }
 
 ostream& operator<<(ostream& os, Item& item) {
     os << item.name << " " << item.price;

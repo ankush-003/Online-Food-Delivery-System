@@ -7,21 +7,21 @@ using namespace std;
 void displayMainMenu() {
     cout << R"(
 
- █████   ███  ██████      ███████  ██████   ██████  ██████  ███████ 
-██   ██ ██ ██      ██     ██      ██    ██ ██    ██ ██   ██ ██      
-███████        █████      █████   ██    ██ ██    ██ ██   ██ ███████ 
-██   ██            ██     ██      ██    ██ ██    ██ ██   ██      ██ 
-██   ██       ██████      ██       ██████   ██████  ██████  ███████ 
+        █████   ███  ██████      ███████  ██████   ██████  ██████  ███████ 
+       ██   ██ ██ ██      ██     ██      ██    ██ ██    ██ ██   ██ ██      
+       ███████        █████      █████   ██    ██ ██    ██ ██   ██ ███████ 
+       ██   ██            ██     ██      ██    ██ ██    ██ ██   ██      ██ 
+       ██   ██       ██████      ██       ██████   ██████  ██████  ███████ 
                                                                     
                                                                     
 
-        [1] Hotel Login
+        [1] Admin Login
         [2] User Login
         [3] Hotels
         [4] Delivery
         [5] Exit
 
-        Enter your choice: )" << endl;
+        Enter your choice: )";
     // cout << "Main Menu:" << endl;
     // cout << "1. Admin" << endl;
     // cout << "2. User" << endl;
@@ -41,12 +41,12 @@ namespace main_funcs {
 
     // Function to execute option 2
     void User() {
-        cout << "Welcome to User Login" << endl;
-        cout << "1. Login" << endl;
-        cout << "2. Register" << endl;
-        cout << "3. Forgot Password" << endl;
-        cout << "4. Exit" << endl;
-        cout << "Enter your choice: ";
+        cout << "\t\t\t Welcome to User Login" << endl;
+        cout << "\t\t\t 1. Login" << endl;
+        cout << "\t\t\t 2. Register" << endl;
+        cout << "\t\t\t 3. Forgot Password" << endl;
+        cout << "\t\t\t 4. Exit" << endl;
+        cout << "\t\t\t Enter your choice: ";
         int choice;
         cin >> choice;
         switch (choice) {
@@ -61,10 +61,17 @@ namespace main_funcs {
                 break;
 
             case 4:
-                cout << "Exiting..." << endl;
+                cout << R"(
+                      ██████╗ ██╗   ██╗███████╗
+                      ██╔══██╗╚██╗ ██╔╝██╔════╝
+                      ██████╔╝ ╚████╔╝ █████╗  
+                      ██╔══██╗  ╚██╔╝  ██╔══╝  
+                      ██████╔╝   ██║   ███████╗
+                      ╚═════╝    ╚═╝   ╚══════╝
+                )" << endl;
                 break;    
             default:
-                system("cls");
+                // system("cls");
                 cout << "Invalid choice. Please try again." << endl << endl;
                 break;
         }
@@ -90,6 +97,12 @@ int main() {
 
     while (!exit) {
         displayMainMenu();
+        // if(!(cin >> choice)) {
+        //     cout << "Invalid choice. Please try again." << endl << endl;
+        //     cin.clear();
+        //     cin.ignore(10000, '\n');
+        //     continue;
+        // }
         cin >> choice;
 
         switch (choice) {
