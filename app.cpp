@@ -1,6 +1,9 @@
 #include <bits/stdc++.h>
 #include "User.h"
 #include "Admin.h"
+#include "Hotel.h"
+#include "hotel_manager.h"
+
 
 using namespace std;
 
@@ -144,6 +147,8 @@ namespace main_funcs {
     void Hotel() {
         cout << "Executing Option 3..." << endl;
         // Your logic for Option 3 goes here
+
+        Hotel_Manager::manager_menu();
         cout << "Option 3 executed!" << endl << endl;
     }
 
