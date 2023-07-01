@@ -9,6 +9,7 @@ using namespace std;
 
 void displayMainMenu()
 {
+    //  cout << "\033[1;31mbold red text\033[0m\n";
     // cout << "\t\t\t Environment Variables" << endl;
     // cout << "\t\t\t admin_db: " << getenv("admin_db") << endl;
     // cout << "\t\t\t user_db: " << getenv("user_db") << endl;
