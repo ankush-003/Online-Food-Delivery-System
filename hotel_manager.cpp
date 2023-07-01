@@ -3,7 +3,11 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <limits>
+#include <algorithm>
+#include <cstring>
 #include "hotel_manager.h"
+#include "User.h"
 
 Menu_Item::Menu_Item(const string &item_name, double item_price) : name(item_name), price(item_price) {}
 
@@ -11,9 +15,9 @@ Hotel_Manager::Hotel_Manager(const string &name, const string &hname) : manager_
 
 void Hotel_Manager::manager_menu()
 {
-    string name;
+    char name[100];
     string password;
-    string hname;
+    char hname[100];
 
     string manager_name_infile, manager_password_infile;
 
@@ -29,189 +33,224 @@ void Hotel_Manager::manager_menu()
         cin >> choice;
 
         fstream manager_database;
-        switch (choice)
+
+        try
         {
-        case 1:
-            cout << "Please enter your username:" << endl;
-            cin >> name;
-            cout << "Please enter a password:" << endl;
-            cin >> password;
-            cout << "Please enter your hotel name:" << endl;
-            cin.clear();
-            cin.ignore(1000, '\n');
-            getline(cin, hname, '\n');
-            manager_database.open(manager_database_file, ios::app);
-            if (manager_database.is_open())
+            switch (choice)
             {
-                manager_database << name << "," << password << "," << hname << "\n";
-                manager_database.close();
-                cout << "You have successfully registered!\n";
-            }
-            else
-            {
-                cout << "Failed to open the manager database file.\n";
-            }
-            break;
-
-        case 2:
-            cout << "Please enter your name:" << endl;
-            cin >> name;
-            cout << "Please enter a password:" << endl;
-            cin >> password;
-
-            manager_database.open(manager_database_file);
-            if (manager_database.is_open())
-            {
-                string line;
-                while (getline(manager_database, line))
+            case 1:
+                cout << "Please enter your username:" << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cin.getline(name, 100);
+                cout << "Please enter a password:" << endl;
+                cin >> password;
+                cout << "Please enter your hotel name:" << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cin.getline(hname, 100);
+                manager_database.open(manager_database_file, ios::app);
+                if (manager_database.is_open())
                 {
-                    stringstream ss(line);
-                    getline(ss, manager_name_infile, ',');
-                    getline(ss, manager_password_infile, ',');
-                    getline(ss, hname, ',');
+                    manager_database << name << "," << password << "," << hname << "\n";
+                    manager_database.close();
+                    cout << "You have successfully registered!\n";
+                }
+                else
+                {
+                    cout << "Failed to open the manager database file.\n";
+                }
+                break;
 
-                    if (name == manager_name_infile && password == manager_password_infile)
+            case 2:
+                cout << "Please enter your name:" << endl;
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cin.getline(name, 100);
+                cout << "Please enter a password:" << endl;
+                cin >> password;
+
+                manager_database.open(manager_database_file);
+                if (manager_database.is_open())
+                {
+                    string line;
+                    bool registered = false;
+                    while (getline(manager_database, line))
                     {
-                        cout << "Login Successful!!!" << endl;
-                        Hotel_Manager manager(name, hname);
-                        // manager.add_item_to_menu("Pizza", 9.6);
-                        // manager.add_item_to_menu("Burger", 6.9);
-                        // manager.add_item_to_menu("Pasta", 20.0);
-                        // manager.delete_item_from_menu("Burger");
+                        stringstream ss(line);
+                        getline(ss, manager_name_infile, ',');
+                        getline(ss, manager_password_infile, ',');
+                        ss.getline(hname, 100, ',');
 
-                        int manager_choice;
-                        string item_name;
-                        float item_price;
-
-                        string manager_continue;
-
-                        do
+                        if (name == manager_name_infile && password == manager_password_infile)
                         {
-                            cout << "What do you want to do?" << endl;
+                            registered = true;
+                            cout << "Login Successful!!!" << endl;
+                            Hotel_Manager manager(name, hname);
+                            // manager.add_item_to_menu("Pizza", 9.6);
+                            // manager.add_item_to_menu("Burger", 6.9);
+                            // manager.add_item_to_menu("Pasta", 20.0);
+                            // manager.delete_item_from_menu("Burger");
 
-                            cout << "1.Add item to the menu" << endl;
-                            cout << "2.Remove item from the menu" << endl;
-                            cout << "3.Display the menu" << endl;
+                            int manager_choice;
+                            char item_name[100];
+                            float item_price;
 
-                            cout << "Enter your choice:" << endl;
-                            cin >> manager_choice;
+                            // int manager_continue = -1;
 
-                            fstream menu;
-
-                            string manager_continue;
-
-                            switch (manager_choice)
+                            int manager_continue = -1;
+                            do
                             {
-                            case 1:
+                                cout << "What do you want to do?" << endl;
 
-                                cout << "Enter the name of the item you want to add:" << endl;
-                                cin >> item_name;
-                                cout << "Enter the of the item that you just enetered:" << endl;
-                                cin >> item_price;
-                                manager.add_item_to_menu(item_name, item_price);
-                                break;
+                                cout << "1.Add item to the menu" << endl;
+                                cout << "2.Remove item from the menu" << endl;
+                                cout << "3.Display the menu" << endl;
 
-                            case 2:
-                                cout << "Enter the name of the item you want to delete:" << endl;
-                                cin >> item_name;
-                                manager.delete_item_from_menu(item_name);
-                                break;
+                                cout << "Enter your choice:" << endl;
+                                cin >> manager_choice;
 
-                            case 3:
-                                cout << "Menu of " << hname << endl;
+                                fstream menu;
 
-                                menu.open("menu_" + hname + ".csv");
-                                if (menu.is_open())
+
+                                switch (manager_choice)
                                 {
-                                    string line;
-                                    while (getline(menu, line))
+                                case 1:
+
+                                    cout << "Enter the name of the item you want to add:" << endl;
+                                    cin.clear();
+                                    cin.ignore(1000, '\n');
+                                    cin.getline(item_name, 100);
+                                    cout << "Enter the price of the item that you just enetered:" << endl;
+                                    cin >> item_price;
+                                    manager.add_item_to_menu(item_name, item_price);
+                                    break;
+
+                                case 2:
+                                    cout << "Enter the name of the item you want to delete:" << endl;
+                                    cin.clear();
+                                    cin.ignore(1000, '\n');
+                                    cin.getline(item_name, 100);
+                                    manager.delete_item_from_menu(item_name);
+                                    break;
+
+                                case 3:
+                                    cout << "Menu of " << std::string(hname) << endl;
+
+                                    menu.open(std::string("./Database/menu_") + hname + ".csv");
+                                    if (menu.is_open())
                                     {
-                                        stringstream ss(line);
-                                        string item_name;
-                                        double item_price;
-                                        getline(ss, item_name, ',');
-                                        ss >> item_price;
-                                        cout << "Item: " << item_name << " | Price: " << item_price << endl;
+                                        string line;
+                                        while (getline(menu, line))
+                                        {
+                                            stringstream ss(line);
+                                            char item_name[100];
+                                            double item_price;
+                                            ss.get(item_name, 100, ',');
+                                            ss.ignore(std::numeric_limits<std::streamsize>::max(), ',');
+
+                                            ss >> item_price;
+                                            cout << "Item: " << item_name << " | Price: " << item_price << endl;
+                                        }
+                                        menu.close();
                                     }
-                                    menu.close();
-                                }
-                                else
-                                {
-                                    cout << "Failed to open the menu file." << endl;
-                                }
-                                break;
+                                    else
+                                    {
+                                        cout << "Failed to open the menu file." << endl;
+                                        
+                                    }
+                                    break;  //
 
-                            default:
-                                cout << "Invalid choice" << endl;
-                                break;
-                            }
+                                default:
+                                    cout << "Invalid choice" << endl;
+                                    break;
+                                }
 
-                            cout << "Do you want to continue? (Y/N): ";
-                            cin >> manager_continue;
-                        } while (manager_continue == "Y" || manager_continue == "y");
+                                cout << "Do you want to continue? (Y(1)/N(0)): ";
+                                cin.clear();
+                                cin.ignore(1000, '\n');
+                                global_funcs::get_input(manager_continue);
+                                // cin >> manager_choice;
+                                // cout << manager_continue << endl;
+                                if(!manager_continue) {
+                                    break;
+                                }
+                            } while (1);
+                        }
+                    }
+                    manager_database.close();
+
+                    if (!registered)
+                    {
+                        cout << "Sorry, you are not registered. Please register yourself to continue" << endl;
                     }
                 }
-                manager_database.close();
+                else
+                {
+                    throw std::runtime_error("Failed to open the manager database file.");
+                }
+                break;
+
+            case 3:
+                cout << "You exited" << endl;
+                choice = 0;
+                break;
+
+            default:
+                cout << "Invalid choice" << endl;
+                break;
             }
-            break;
+        }
 
-        case 3:
-            cout << "You exited" << endl;
-            choice = 0;
-            break;
-
-        default:
-            cout << "Invalid choice" << endl;
+        catch (const std::exception &ex)
+        {
+            cout << "An error occurred: " << ex.what() << endl;
         }
     } while (choice);
 }
 
 void Hotel_Manager::add_item_to_menu(const string &item_name, double item_price)
 {
-    ofstream menufile("menu_" + hotel_name + ".csv", ios::app); // app is append mode
-        if (menufile.is_open())
-        {
-            menufile << item_name << "," << item_price << "\n";
-            menufile.close();
-            cout << "Item added to the menu successfully.\n";
-        }
-        else
-        {
-            cout << "Failed to open the menu database file.\n";
-        }
+    ofstream menufile("./Database/menu_" + hotel_name + ".csv", ios::app); // app is append mode
+    if (menufile.is_open())
+    {
+        menufile << item_name << "," << item_price << "\n";
+        menufile.close();
+        cout << "Item added to the menu successfully.\n";
+    }
+    else
+    {
+        cout << "Failed to open the menu database file.\n";
+    }
 }
-
-
 
 void Hotel_Manager::delete_item_from_menu(const string &item_name)
 {
     // Read the menu database file into memory
-        ifstream menufile(menu_database_file);
-        if (menufile.is_open())
+    ifstream menufile("./Database/menu_" + hotel_name + ".csv");
+    if (menufile.is_open())
+    {
+        vector<Menu_Item> Menu_Items;
+        string line;
+        while (getline(menufile, line))
         {
-            vector<Menu_Item> Menu_Items;
-            string line;
-            while (getline(menufile, line))
-            {
-                string item_name_in_file = line.substr(0, line.find(','));
-                double item_price_in_file = stod(line.substr(line.find(',') + 1));
-                Menu_Items.push_back(Menu_Item(item_name_in_file, item_price_in_file));
-            }
-            menufile.close();
+            string item_name_in_file = line.substr(0, line.find(','));
+            double item_price_in_file = stod(line.substr(line.find(',') + 1));
+            Menu_Items.push_back(Menu_Item(item_name_in_file, item_price_in_file));
+        }
+        menufile.close();
 
-            // Find and remove the item from the Menu_Items vector
-            bool found = false;
-            for (auto it = Menu_Items.begin(); it != Menu_Items.end(); ++it)
-            {
-                if (it->name == item_name)
-                {
-                    Menu_Items.erase(it);
-                    found = true;
-                    break;
-                }
-            }
+        // Find and remove the item from the Menu_Items vector
+        bool found = false;
+
+        auto it = std::find_if(Menu_Items.begin(), Menu_Items.end(), [&](const Menu_Item &item)
+                               { return item.name == item_name; });
+        if (it != Menu_Items.end())
+        {
+            Menu_Items.erase(it);
+
             // Rewrite the menu database file with updated Menu_Items
-            ofstream updated_menu_file(menu_database_file);
+            ofstream updated_menu_file("./Database/menu_" + hotel_name + ".csv");
             if (updated_menu_file.is_open())
             {
                 for (const auto &item : Menu_Items)
@@ -219,25 +258,23 @@ void Hotel_Manager::delete_item_from_menu(const string &item_name)
                     updated_menu_file << item.name << "," << item.price << "\n";
                 }
                 updated_menu_file.close();
-                if (found)
-                    cout << "Item deleted from the menu successfully.\n";
-                else
-                    cout << "Item not found in the menu.\n";
+                cout << "Item deleted from the menu successfully.\n";
             }
             else
             {
-                cout << "Failed to open the menu database file.\n";
+                cout << "failed to open database file.\n";
             }
         }
         else
         {
-            cout << "Failed to open the menu database file.\n";
+            cout << "Item not there in menu.\n";
         }
+    }
+    else
+    {
+        cout << "Failed to open the menu database file.\n";
+    }
 }
 
-
-string Hotel_Manager::menu_database_file = "menu_abc.csv";
-string Hotel_Manager::manager_database_file = "managers.csv";
-
-
-
+string Hotel_Manager::menu_database_file = "./Database/menu_abc.csv";
+string Hotel_Manager::manager_database_file = "./Database/managers.csv";
