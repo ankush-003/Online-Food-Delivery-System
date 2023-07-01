@@ -54,6 +54,7 @@ namespace global_funcs {
             // cin.ignore(numeric_limits<streamsize>::max(), '\n');
             cin.ignore(1000, '\n');
             cout << "Invalid input!" << endl;
+            throw "Invalid input!";
             return;
         }
     }

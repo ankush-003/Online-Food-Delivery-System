@@ -3,6 +3,7 @@
 #include "Admin.h"
 #include "Hotel.h"
 #include "hotel_manager.h"
+#include "delivery.h"
 
 using namespace std;
 
@@ -180,7 +181,41 @@ namespace main_funcs
     void Delivery()
     {
         cout << "Executing Option 4..." << endl;
-        // Your logic for Option 4 goes here
+        DeliveryApp deliveryApp;
+
+        cout << "\nDelivery Application\n";
+        cout << "---------------------";
+
+        while (true)
+        {
+            cout << deliveryApp;
+
+            int choice = getDeliveryChoice();
+
+            if (choice == -1)
+            {
+                break;
+            }
+            else if (choice == 0)
+            {
+                deliveryApp.displayDeliveryQueue();
+                int deliveredChoice;
+                cout << "\nEnter the item number that has been delivered (0 to continue): ";
+                // cin >> deliveredChoice;
+                global_funcs::get_input(deliveredChoice);
+                deliveryApp.markItemDelivered(deliveredChoice);
+            }
+            else
+            {
+                deliveryApp.addItemToQueue(choice);
+            }
+        }
+
+        deliveryApp.saveItemsToCSV();
+        deliveryApp.saveDeliveryQueueToCSV();
+
+        cout << "--------------------------------------------------------\n";
+        cout << "THANK YOU FOR USING THE APP";
         cout << "Option 4 executed!" << endl
              << endl;
     }

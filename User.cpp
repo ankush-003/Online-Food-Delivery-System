@@ -194,18 +194,21 @@ bool User::checkout() {
     cin >> choice;
     if(choice == "y" || choice == "Y") {
         ofstream bill(this->userID + "_bill.txt"); 
+        ofstream dell_orders("./Database/dell.csv");
         bill << "--- Bill ---" << endl;
         bill << "\t\t\t Order Details: " << endl;
         bill << "\t\t\t Hotel Name: " << this -> selectedHotel << endl;
         for (auto item : cart)
         {
             bill << "\t\t\t " << item << endl;
+            dell_orders << item.name << endl;
         }
         bill << "\t\t\t Total: " << this -> total << endl;
         bill << "\t\t\t Address: " << this -> Address << endl;
         bill << "\t\t\t Phone: " << this -> Phone << endl;
         bill << "--- Thank you for ordering! ---" << endl;
         bill.close();
+        dell_orders.close();
         ofstream orders(hotel_db::orders_db, ios::app);
         orders << this -> userID << "," << this -> Address << "," << this -> Phone << "," << this -> selectedHotel << "," << this -> total << endl;
         orders.close();
