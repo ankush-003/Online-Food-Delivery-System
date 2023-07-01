@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 #include <queue>
+#include "Admin.h"
 using namespace std;
 
 #ifndef DELIVERY_H
@@ -60,7 +61,7 @@ class DeliveryApp
     queue<string> deliveryQueue;
     vector<string> items;
 public:
-    DeliveryApp() : items(readCSV<string>("./Database/dell.csv")) {}
+    DeliveryApp() : items(readCSV<string>(databases::deliveries_db)) {}
 
     void addItemToQueue(int choice)
     {
@@ -115,7 +116,7 @@ public:
 
     void saveItemsToCSV() const
     {
-        ofstream outFile("./Database/dell.csv");
+        ofstream outFile(databases::deliveries_db);
         if (outFile)
         {
             for (const string &item : items)
@@ -132,7 +133,7 @@ public:
 
     void saveDeliveryQueueToCSV() const
     {
-        ofstream queueFile("undelivered_queue.csv");
+        ofstream queueFile(databases::undelivered_db);
         if (queueFile)
         {
             queue<string> tempQueue = deliveryQueue;

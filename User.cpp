@@ -1,12 +1,13 @@
 #include <bits/stdc++.h>
 #include "User.h"
 #include "Hotel.h"
+#include "Admin.h"
 
 using namespace std;
 
 int User::count = 0;
 
-string User::user_db = "./Database/users.csv";
+// string User::user_db = "./Database/users.csv";
 
 // inline void global_funcs::input_flush()
 // {
@@ -28,7 +29,7 @@ User::~User()
 void User::select_hotel()
 {
     cout << "Executing Hotel Selection..." << endl;
-    ifstream hotels(hotel_db::hotels_db);
+    ifstream hotels(databases::hotel_db);
     if (!hotels.is_open())
     {
         cout << "File not found!" << endl;
@@ -73,7 +74,7 @@ void User::list_items()
 {
     cout << "Executing List Items..." << endl;
     cout << "\t\t\t Items Available: " << endl;
-    ifstream items(hotel_db::items_db + selectedHotel + ".csv");
+    ifstream items(databases::item_db + selectedHotel + ".csv");
     if (!items.is_open())
     {
         cout << "File not found!" << endl;
@@ -194,7 +195,7 @@ bool User::checkout() {
     cin >> choice;
     if(choice == "y" || choice == "Y") {
         ofstream bill(this->userID + "_bill.txt"); 
-        ofstream dell_orders("./Database/dell.csv");
+        ofstream dell_orders(databases::deliveries_db, ios::app);
         bill << "\t\t\t--- Bill ---" << endl;
         bill << "\t\t\t Order Details: " << endl;
         bill << "\t\t\t Hotel Name: " << this -> selectedHotel << endl;
@@ -253,7 +254,7 @@ void user_funcs::login()
     cout << "\t\t\t Password: ";
     // cin >> password;
     global_funcs::get_input(password);
-    ifstream input(User::user_db);
+    ifstream input(databases::user_db);
     if (!input.is_open())
     {
         cout << "File not found!" << endl;
@@ -358,7 +359,7 @@ void user_funcs::registerUser()
     // cin.clear();
     // cin.ignore(1000,'\n');
     global_funcs::get_input(phone);
-    ofstream output(User::user_db, ios::app);
+    ofstream output(databases::user_db, ios::app);
     if(!output.is_open()){
         cout << "File not found!" << endl;
         return;
@@ -384,7 +385,7 @@ void user_funcs::forgot()
     string sname;
     string line;
     stringstream ss;
-    ifstream database(User::user_db);
+    ifstream database(databases::user_db);
     if(!database.is_open()) {
         cout << "File Not Found!" << endl;
         return;

@@ -9,6 +9,14 @@ using namespace std;
 
 void displayMainMenu()
 {
+    // cout << "\t\t\t Environment Variables" << endl;
+    // cout << "\t\t\t admin_db: " << getenv("admin_db") << endl;
+    // cout << "\t\t\t user_db: " << getenv("user_db") << endl;
+    // cout << "\t\t\t hotel_db: " << getenv("hotel_db") << endl;
+    // cout << "\t\t\t item_db: " << getenv("item_db") << endl;
+    // cout << "\t\t\t manager_db: " << getenv("manager_db") << endl;
+    // cout << "\t\t\t deliveries_db: " << getenv("deliveries_db") << endl;
+    // cout << "\t\t\t undelivered_db: " << getenv("undelivered_db") << endl;
     cout << R"(
 
         █████   ███  ██████      ███████  ██████   ██████  ██████  ███████ 
@@ -38,7 +46,7 @@ void displayMainMenu()
 namespace main_funcs
 {
     // Function to execute option 1
-    void Admin()
+    void Admin_func()
     {
         // cout << "Executing Option 1..." << endl;
         cout << "\t\t\t Welcome to Admin Login" << endl;
@@ -54,7 +62,9 @@ namespace main_funcs
         if (admin_funcs::login(username, password))
         {
             cout << "\t\t\t Login Successful!" << endl;
-            cout << "\t\t\t Welcome " << username << "!" << endl;
+            Admin admin(username, password, "dev");
+            cout << "\t\t\t Welcome " << endl;
+            cout << admin << endl;
             int choice = -1;
             do
             {
@@ -78,51 +88,51 @@ namespace main_funcs
                 {
                 case 1:
                     cout << "executing add hotel..." << endl;
-                    Admin::add_hotel();
+                    admin.add_hotel();
                     break;
                 case 2:
                     cout << "executing remove hotel..." << endl;
-                    Admin::remove_hotel();
+                    admin.remove_hotel();
                     break;
                 case 3:
                     cout << "executing view hotels..." << endl;
-                    Admin::view_hotels();
+                    admin.view_hotels();
                     break;
                 case 4:
                     cout << "executing add user..." << endl;
-                    Admin::add_user();
+                    admin.add_user();
                     break;
                 case 5:
                     cout << "executing remove user..." << endl;
-                    Admin::remove_user();
+                    admin.remove_user();
                     break;
                 case 6:
                     cout << "executing view users..." << endl;
-                    Admin::view_users();
+                    admin.view_users();
                     break;
                 case 7:
                     cout << "executing add item..." << endl;
-                    Admin::add_item();
+                    admin.add_item();
                     break;
                 case 8:
                     cout << "executing remove item..." << endl;
-                    Admin::remove_item();
+                    admin.remove_item();
                     break;
                 case 9:
                     cout << "executing view items..." << endl;
-                    Admin::view_items();
+                    admin.view_items();
                     break;
                 case 10:
                     cout << "executing add manager..." << endl;
-                    Admin::add_manager();
+                    admin.add_manager();
                     break;
                 case 11:
                     cout << "executing remove manager..." << endl;
-                    Admin::remove_manager();
+                    admin.remove_manager();
                     break;
                 case 12:
                     cout << "executing view managers..." << endl;
-                    Admin::view_managers();
+                    admin.view_managers();
                     break;
                 case 13:
                     cout << "executing exit..." << endl;
@@ -235,10 +245,13 @@ namespace main_funcs
     }
 }
 
+
 int main()
 {
+
     int choice;
     bool exit = false;
+
 
     while (!exit)
     {
@@ -255,7 +268,7 @@ int main()
         switch (choice)
         {
         case 1:
-            main_funcs::Admin();
+            main_funcs::Admin_func();
             break;
         case 2:
             main_funcs::User();
@@ -268,7 +281,16 @@ int main()
             break;
         case 5:
             exit = true;
-            cout << "Exiting..." << endl;
+            // cout << "Exiting..." << endl;
+            cout << R"(
+                      ██████╗ ██╗   ██╗███████╗
+                      ██╔══██╗╚██╗ ██╔╝██╔════╝
+                      ██████╔╝ ╚████╔╝ █████╗  
+                      ██╔══██╗  ╚██╔╝  ██╔══╝  
+                      ██████╔╝   ██║   ███████╗
+                      ╚═════╝    ╚═╝   ╚══════╝
+                )"
+                 << endl;
             break;
         default:
             cout << "Invalid choice. Please try again." << endl

@@ -6,6 +6,7 @@
 #include <queue>
 #include "delivery.h"
 #include "User.h"
+#include "Admin.h"
 
 using namespace std;
 

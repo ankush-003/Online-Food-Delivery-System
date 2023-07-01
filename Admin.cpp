@@ -9,7 +9,8 @@
 using namespace std;
 
 bool admin_funcs::login(string username, string password) {
-    ifstream file(admin_funcs::admin_db);
+    // ifstream file(databases::admin_db);
+    ifstream file(getenv("admin_db"));
     string line;
     stringstream ss;
     string id, pass, role;
@@ -36,7 +37,7 @@ Admin::Admin(string username, string password, string role) {
 }
 
 bool Admin::search_hotel(string name) {
-    ifstream file(hotel_db::hotels_db);
+    ifstream file(databases::hotel_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return false;
@@ -73,7 +74,7 @@ void Admin::add_hotel() {
     // global_funcs::input_flush();
     getline(cin, email);
 
-    ofstream file(hotel_db::hotels_db, ios::app);
+    ofstream file(databases::hotel_db, ios::app);
     if (!file.is_open())
     {
         cout << "Error opening file!" << endl;
@@ -96,7 +97,7 @@ void Admin::remove_hotel() {
     global_funcs::input_flush();
     getline(cin, name);
     auto update = [](string name) {
-        ifstream file(hotel_db::hotels_db);
+        ifstream file(databases::hotel_db);
         ofstream temp("temp.csv");
         if(!file.is_open()) {
             cout << "Error opening file!" << endl;
@@ -126,7 +127,7 @@ void Admin::remove_hotel() {
         if(!found) {
             return false;
         }
-        string fname = hotel_db::hotels_db;
+        string fname = databases::hotel_db;
         remove(fname.c_str());
         rename("temp.csv", fname.c_str());
         return true;
@@ -139,7 +140,7 @@ void Admin::remove_hotel() {
 }
 
 bool Admin::search_user(string username) {
-    ifstream file(Admin::user_db);
+    ifstream file(databases::user_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return false;
@@ -175,7 +176,7 @@ void Admin::add_user() {
     cout << "Enter user phone: ";
     getline(cin, phone);
     
-    ofstream file(Admin::user_db, ios::app);
+    ofstream file(databases::user_db, ios::app);
     if (!file.is_open())
     {
         cout << "Error opening file!" << endl;
@@ -198,7 +199,7 @@ void Admin::remove_user() {
     global_funcs::input_flush();
     getline(cin, name);
     auto update = [](string name) {
-        ifstream file(Admin::user_db);
+        ifstream file(databases::user_db);
         ofstream temp("temp.csv");
         if(!file.is_open()) {
             cout << "Error opening file!" << endl;
@@ -228,7 +229,7 @@ void Admin::remove_user() {
         if(!found) {
             return false;
         }
-        string fname = Admin::user_db;
+        string fname = databases::user_db;
         remove(fname.c_str());
         rename("temp.csv", fname.c_str());
         return true;
@@ -248,7 +249,7 @@ void Admin::add_item() {
     getline(cin, hotel_name);
     bool found = false;
     auto search = [](string hotel_name) {
-        ifstream file(hotel_db::hotels_db);
+        ifstream file(databases::hotel_db);
         string line;
         stringstream ss;
         string name, address, phone, email;
@@ -271,7 +272,7 @@ void Admin::add_item() {
         cout << "\t\t\t Hotel not found!" << endl;
         return;
     }
-    string fname = hotel_db::items_db + hotel_name + ".csv";
+    string fname = databases::item_db + hotel_name + ".csv";
     vector<Item> items;
     ifstream file(fname);
     if(!file.is_open()) {
@@ -340,7 +341,7 @@ void Admin::remove_item() {
         cout << "\t\t\t Hotel not found!" << endl;
         return;
     }
-    string fname = hotel_db::items_db + hotel_name + ".csv";
+    string fname = databases::item_db + hotel_name + ".csv";
     vector<Item> items;
     ifstream file(fname);
     if(!file.is_open()) {
@@ -403,7 +404,7 @@ void Admin::remove_item() {
         if(!found) {
             return false;
         }
-        string fname2 = hotel_db::items_db + fname + ".csv";
+        string fname2 = databases::item_db + fname + ".csv";
         remove(fname2.c_str());
         rename("temp.csv", fname2.c_str());
         return true;
@@ -417,7 +418,7 @@ void Admin::remove_item() {
 }
 
 void Admin::view_users() {
-    ifstream file(User::user_db);
+    ifstream file(databases::user_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return;
@@ -443,7 +444,7 @@ void Admin::view_users() {
 }
 
 void Admin::view_hotels() {
-    ifstream file(hotel_db::hotels_db);
+    ifstream file(databases::hotel_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return;
@@ -478,7 +479,7 @@ void Admin::view_items() {
         cout << "\t\t\t Hotel not found!" << endl;
         return;
     }
-    string fname = hotel_db::items_db + hotel_name + ".csv";
+    string fname = databases::hotel_db + hotel_name + ".csv";
     ifstream file(fname);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
@@ -503,7 +504,7 @@ void Admin::view_items() {
 }
 
 bool Admin::search_manager(string mname) {
-    ifstream file("./Database/managers.csv");
+    ifstream file(databases::manager_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return false;
@@ -548,7 +549,7 @@ void Admin::add_manager() {
         cout << "\t\t\t Hotel not found!" << endl;
         return;
     }
-    ofstream file("./Database/managers.csv", ios::app);
+    ofstream file(databases::manager_db, ios::app);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return;
@@ -569,7 +570,7 @@ void Admin::remove_manager() {
     }
     bool found = false;
     auto update = [&](string mname) {
-        ifstream file("./Database/managers.csv");
+        ifstream file(databases::manager_db);
         if(!file.is_open()) {
             cout << "Error opening file!" << endl;
             return false;
@@ -598,8 +599,8 @@ void Admin::remove_manager() {
         if(!found) {
             return false;
         }
-        remove("./Database/managers.csv");
-        rename("temp.csv", "./Database/managers.csv");
+        remove(databases::manager_db.c_str());
+        rename("temp.csv", databases::manager_db.c_str());
         return true;
     };
     if(update(manager_name)) {
@@ -610,7 +611,7 @@ void Admin::remove_manager() {
 }
 
 void Admin::view_managers() {
-    ifstream file("./Database/managers.csv");
+    ifstream file(databases::manager_db);
     if(!file.is_open()) {
         cout << "Error opening file!" << endl;
         return;
@@ -618,7 +619,7 @@ void Admin::view_managers() {
     string line;
     stringstream ss;
     string manager_name, password, hotel_name;
-    file >> line;
+    // file >> line;
     cout << "\t\t\t----- Managers: -----" << endl;
     cout << "\t\t\t Manager_name Password Hotel_name" << endl;
     while(file >> line) {
