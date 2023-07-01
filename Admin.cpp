@@ -501,3 +501,134 @@ void Admin::view_items() {
     cout << "\t\t\t----------" << endl;
     file.close();
 }
+
+bool Admin::search_manager(string mname) {
+    ifstream file("./Database/managers.csv");
+    if(!file.is_open()) {
+        cout << "Error opening file!" << endl;
+        return false;
+    }
+    string line;
+    stringstream ss;
+    string manager_name, password, hotel_name;
+    // file >> line;
+    while(file >> line) {
+        ss << line;
+        getline(ss, manager_name, ',');
+        getline(ss, password, ',');
+        getline(ss, hotel_name, ',');
+        ss.clear();
+        if(manager_name == mname) {
+            file.close();
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
+void Admin::add_manager() {
+    cout << "\t\t\t Enter Manager name: ";
+    string manager_name;
+    global_funcs::input_flush();
+    getline(cin, manager_name);
+    if(search_manager(manager_name)) {
+        cout << "\t\t\t Manager already exists!" << endl;
+        return;
+    }
+    cout << "\t\t\t Enter Manager password: ";
+    string password;
+    // global_funcs::input_flush();
+    getline(cin, password);
+    cout << "\t\t\t Enter Hotel name: ";
+    string hotel_name;
+    // global_funcs::input_flush();
+    getline(cin, hotel_name);
+    if(!search_hotel(hotel_name)) {
+        cout << "\t\t\t Hotel not found!" << endl;
+        return;
+    }
+    ofstream file("./Database/managers.csv", ios::app);
+    if(!file.is_open()) {
+        cout << "Error opening file!" << endl;
+        return;
+    }
+    file << manager_name << "," << password << "," << hotel_name << endl;
+    file.close();
+    cout << "\t\t\t Manager added successfully!" << endl;
+}
+
+void Admin::remove_manager() {
+    cout << "\t\t\t Enter Manager name: ";
+    string manager_name;
+    global_funcs::input_flush();
+    getline(cin, manager_name);
+    if(!search_manager(manager_name)) {
+        cout << "\t\t\t Manager not found!" << endl;
+        return;
+    }
+    bool found = false;
+    auto update = [&](string mname) {
+        ifstream file("./Database/managers.csv");
+        if(!file.is_open()) {
+            cout << "Error opening file!" << endl;
+            return false;
+        }
+        string line;
+        stringstream ss;
+        string manager_name, password, hotel_name;
+        ofstream temp("temp.csv");
+        if(!temp.is_open()) {
+            cout << "Error opening file!" << endl;
+            return false;
+        }
+        while(file >> line) {
+            ss << line;
+            getline(ss, manager_name, ',');
+            getline(ss, password, ',');
+            getline(ss, hotel_name, ',');
+            ss.clear();
+            if(manager_name != mname) {
+                temp << manager_name << "," << password << "," << hotel_name << endl;
+            } else {
+                found = true;
+            }
+        }
+        temp.close();
+        if(!found) {
+            return false;
+        }
+        remove("./Database/managers.csv");
+        rename("temp.csv", "./Database/managers.csv");
+        return true;
+    };
+    if(update(manager_name)) {
+        cout << "\t\t\t Manager removed successfully!" << endl;
+    } else {
+        cout << "\t\t\t Error removing manager!" << endl;
+    }
+}
+
+void Admin::view_managers() {
+    ifstream file("./Database/managers.csv");
+    if(!file.is_open()) {
+        cout << "Error opening file!" << endl;
+        return;
+    }
+    string line;
+    stringstream ss;
+    string manager_name, password, hotel_name;
+    file >> line;
+    cout << "\t\t\t----- Managers: -----" << endl;
+    cout << "\t\t\t Manager_name Password Hotel_name" << endl;
+    while(file >> line) {
+        ss << line;
+        getline(ss, manager_name, ',');
+        getline(ss, password, ',');
+        getline(ss, hotel_name, ',');
+        ss.clear();
+        cout << "\t\t\t " << manager_name << " " << password << " " << hotel_name << endl;
+    }
+    cout << "\t\t\t----------" << endl;
+    file.close();
+}

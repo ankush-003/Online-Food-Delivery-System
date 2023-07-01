@@ -23,6 +23,10 @@ class Admin: public User {
     static void view_items();
     static void view_hotels();
     static void view_users();
+    static void add_manager();
+    static void remove_manager();
+    static void view_managers();
+    static bool search_manager(string);
     static bool search_hotel(string);
     static bool search_user(string);
 };

@@ -67,7 +67,10 @@ namespace main_funcs
                 cout << "\t\t\t 7. Add Items" << endl;
                 cout << "\t\t\t 8. Remove Items" << endl;
                 cout << "\t\t\t 9. View Items" << endl;
-                cout << "\t\t\t 10. Exit" << endl;
+                cout << "\t\t\t 10. Add Manager" << endl;
+                cout << "\t\t\t 11. Remove Manager" << endl;
+                cout << "\t\t\t 12. View Managers" << endl;
+                cout << "\t\t\t 13. Exit" << endl;
                 cout << "\t\t\t Enter your choice: ";
                 // int choice;
                 global_funcs::get_input(choice);
@@ -110,13 +113,24 @@ namespace main_funcs
                     Admin::view_items();
                     break;
                 case 10:
-                    cout << "Exiting..." << endl;
-                    // exit(0);
+                    cout << "executing add manager..." << endl;
+                    Admin::add_manager();
                     break;
+                case 11:
+                    cout << "executing remove manager..." << endl;
+                    Admin::remove_manager();
+                    break;
+                case 12:
+                    cout << "executing view managers..." << endl;
+                    Admin::view_managers();
+                    break;
+                case 13:
+                    cout << "executing exit..." << endl;
+                    break;        
                 default:
                     cout << "Invalid choice!" << endl;
                 }
-            } while (choice != 10);
+            } while (choice != 13);
         }
         else
         {
@@ -216,8 +230,8 @@ namespace main_funcs
 
         cout << "--------------------------------------------------------\n";
         cout << "THANK YOU FOR USING THE APP";
-        cout << "Option 4 executed!" << endl
-             << endl;
+        // cout << "Option 4 executed!" << endl
+        //      << endl;
     }
 }
 
