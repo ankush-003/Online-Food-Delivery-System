@@ -18,6 +18,7 @@ class User {
     vector<Item> cart;
     double total;
     User(string, string, string, string);
+    ~User(); // Destructor
     User(){}; // Default constructor
     void select_hotel();
     void list_items();

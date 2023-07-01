@@ -4,10 +4,10 @@
 #include "Hotel.h"
 #include "hotel_manager.h"
 
-
 using namespace std;
 
-void displayMainMenu() {
+void displayMainMenu()
+{
     cout << R"(
 
         █████   ███  ██████      ███████  ██████   ██████  ██████  ███████ 
@@ -20,7 +20,7 @@ void displayMainMenu() {
 
         [1] Admin Login
         [2] User Login
-        [3] Hotels
+        [3] Hotel Manager 
         [4] Delivery
         [5] Exit
 
@@ -34,9 +34,11 @@ void displayMainMenu() {
     // cout << "Enter your choice: ";
 }
 
-namespace main_funcs {
+namespace main_funcs
+{
     // Function to execute option 1
-    void Admin() {
+    void Admin()
+    {
         // cout << "Executing Option 1..." << endl;
         cout << "\t\t\t Welcome to Admin Login" << endl;
         cout << "\t\t\t Enter Username: ";
@@ -48,49 +50,63 @@ namespace main_funcs {
         global_funcs::input_flush();
         cin >> password;
 
-        if(admin_funcs::login(username, password)) {
+        if (admin_funcs::login(username, password))
+        {
             cout << "\t\t\t Login Successful!" << endl;
             cout << "\t\t\t Welcome " << username << "!" << endl;
-            cout << "\t\t\t 1. Add Hotel" << endl;
-            cout << "\t\t\t 2. Remove Hotel" << endl;
-            cout << "\t\t\t 3. View Hotels" << endl;
-            cout << "\t\t\t 4. Add Users" << endl;
-            cout << "\t\t\t 5. Remove Users" << endl;
-            cout << "\t\t\t 6. View Users" << endl;
-            cout << "\t\t\t 7. Add Items" << endl;
-            cout << "\t\t\t 8. Remove Items" << endl;
-            cout << "\t\t\t 9. View Items" << endl;
-            cout << "\t\t\t 10. Exit" << endl;
-            cout << "\t\t\t Enter your choice: ";
-            int choice;
-            global_funcs::get_input(choice);
-            switch (choice) {
+            int choice = -1;
+            do
+            {
+                cout << "\t\t\t 1. Add Hotel" << endl;
+                cout << "\t\t\t 2. Remove Hotel" << endl;
+                cout << "\t\t\t 3. View Hotels" << endl;
+                cout << "\t\t\t 4. Add Users" << endl;
+                cout << "\t\t\t 5. Remove Users" << endl;
+                cout << "\t\t\t 6. View Users" << endl;
+                cout << "\t\t\t 7. Add Items" << endl;
+                cout << "\t\t\t 8. Remove Items" << endl;
+                cout << "\t\t\t 9. View Items" << endl;
+                cout << "\t\t\t 10. Exit" << endl;
+                cout << "\t\t\t Enter your choice: ";
+                // int choice;
+                global_funcs::get_input(choice);
+                switch (choice)
+                {
                 case 1:
+                    cout << "executing add hotel..." << endl;
                     Admin::add_hotel();
                     break;
                 case 2:
-                    // Admin::remove_hotel();
+                    cout << "executing remove hotel..." << endl;
+                    Admin::remove_hotel();
                     break;
                 case 3:
-                    // Admin::view_hotels();
+                    cout << "executing view hotels..." << endl;
+                    Admin::view_hotels();
                     break;
                 case 4:
-                    // Admin::add_user();
+                    cout << "executing add user..." << endl;
+                    Admin::add_user();
                     break;
                 case 5:
-                    // Admin::remove_user();
+                    cout << "executing remove user..." << endl;
+                    Admin::remove_user();
                     break;
                 case 6:
-                    // Admin::view_users();
+                    cout << "executing view users..." << endl;
+                    Admin::view_users();
                     break;
                 case 7:
-                    // Admin::add_item();
+                    cout << "executing add item..." << endl;
+                    Admin::add_item();
                     break;
                 case 8:
-                    // Admin::remove_item();
+                    cout << "executing remove item..." << endl;
+                    Admin::remove_item();
                     break;
                 case 9:
-                    // Admin::view_items();
+                    cout << "executing view items..." << endl;
+                    Admin::view_items();
                     break;
                 case 10:
                     cout << "Exiting..." << endl;
@@ -98,15 +114,19 @@ namespace main_funcs {
                     break;
                 default:
                     cout << "Invalid choice!" << endl;
-            }
-        } else {
+                }
+            } while (choice != 10);
+        }
+        else
+        {
             cout << "\t\t\t Login Failed!" << endl;
         }
         // cout << "Option 1 executed!" << endl << endl;
     }
 
     // Function to execute option 2
-    void User() {
+    void User()
+    {
         cout << "\t\t\t Welcome to User Login" << endl;
         cout << "\t\t\t 1. Login" << endl;
         cout << "\t\t\t 2. Register" << endl;
@@ -115,55 +135,64 @@ namespace main_funcs {
         cout << "\t\t\t Enter your choice: ";
         int choice;
         cin >> choice;
-        switch (choice) {
-            case 1:
-                user_funcs::login();
-                break;
-            case 2:
-                user_funcs::registerUser();
-                break;
-            case 3:
-                user_funcs::forgot();
-                break;
+        switch (choice)
+        {
+        case 1:
+            user_funcs::login();
+            break;
+        case 2:
+            user_funcs::registerUser();
+            break;
+        case 3:
+            user_funcs::forgot();
+            break;
 
-            case 4:
-                cout << R"(
+        case 4:
+            cout << R"(
                       ██████╗ ██╗   ██╗███████╗
                       ██╔══██╗╚██╗ ██╔╝██╔════╝
                       ██████╔╝ ╚████╔╝ █████╗  
                       ██╔══██╗  ╚██╔╝  ██╔══╝  
                       ██████╔╝   ██║   ███████╗
                       ╚═════╝    ╚═╝   ╚══════╝
-                )" << endl;
-                break;    
-            default:
-                // system("cls");
-                cout << "Invalid choice. Please try again." << endl << endl;
-                break;
+                )"
+                 << endl;
+            break;
+        default:
+            // system("cls");
+            cout << "Invalid choice. Please try again." << endl
+                 << endl;
+            break;
         }
     }
 
     // Function to execute option 3
-    void Hotel() {
+    void Hotel()
+    {
         cout << "Executing Option 3..." << endl;
         // Your logic for Option 3 goes here
 
         Hotel_Manager::manager_menu();
-        cout << "Option 3 executed!" << endl << endl;
+        cout << "Option 3 executed!" << endl
+             << endl;
     }
 
-    void Delivery() {
+    void Delivery()
+    {
         cout << "Executing Option 4..." << endl;
         // Your logic for Option 4 goes here
-        cout << "Option 4 executed!" << endl << endl;
+        cout << "Option 4 executed!" << endl
+             << endl;
     }
 }
 
-int main() {
+int main()
+{
     int choice;
     bool exit = false;
 
-    while (!exit) {
+    while (!exit)
+    {
         displayMainMenu();
         // if(!(cin >> choice)) {
         //     cout << "Invalid choice. Please try again." << endl << endl;
@@ -174,30 +203,30 @@ int main() {
         // cin >> choice;
         global_funcs::get_input(choice, "Enter your choice: ");
 
-        switch (choice) {
-            case 1:
-                main_funcs::Admin();
-                break;
-            case 2:
-                main_funcs::User();
-                break;
-            case 3:
-                main_funcs::Hotel();
-                break;
-            case 4:
-                main_funcs::Delivery();
-                break;    
-            case 5:
-                exit = true;
-                cout << "Exiting..." << endl;
-                break;
-            default:
-                cout << "Invalid choice. Please try again." << endl << endl;
-                break;
+        switch (choice)
+        {
+        case 1:
+            main_funcs::Admin();
+            break;
+        case 2:
+            main_funcs::User();
+            break;
+        case 3:
+            main_funcs::Hotel();
+            break;
+        case 4:
+            main_funcs::Delivery();
+            break;
+        case 5:
+            exit = true;
+            cout << "Exiting..." << endl;
+            break;
+        default:
+            cout << "Invalid choice. Please try again." << endl
+                 << endl;
+            break;
         }
     }
 
     return 0;
 }
-
-

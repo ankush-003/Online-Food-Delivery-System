@@ -23,6 +23,8 @@ class Admin: public User {
     static void view_items();
     static void view_hotels();
     static void view_users();
+    static bool search_hotel(string);
+    static bool search_user(string);
 };
 
 namespace admin_funcs {

@@ -20,6 +20,11 @@ User::User(string userID, string password, string Address, string Phone): userID
     cout << "\t\t\t Welcome " << userID << "!" << endl;
 }
 
+User::~User()
+{
+    count--;
+}
+
 void User::select_hotel()
 {
     cout << "Executing Hotel Selection..." << endl;
